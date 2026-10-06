@@ -3601,7 +3601,9 @@ System.register("chunks:///_virtual/Protocol.ts", ['./rollupPluginModLoBabelHelp
       var TERMINAL_CLOSE_NOTICES = exports('TERMINAL_CLOSE_NOTICES', Object.freeze({
         4001: '此会话已在另一连接恢复，请重新入房',
         4004: '房间已关闭，请重新入房',
-        4005: '服务器维护中，本局连接已结束，请稍后重新入房'
+        4005: '服务器维护中，本局连接已结束，请稍后重新入房',
+        4006: '请求过于频繁，连接已关闭，请稍后重新入房',
+        4007: '消息格式不兼容，连接已关闭，请更新后重新入房'
       }));
       cclegacy._RF.pop();
     }
@@ -3900,16 +3902,14 @@ System.register("chunks:///_virtual/SceneEntry.ts", ['cc'], function (exports) {
   };
 });
 
-System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './HistoryLookup.ts', './NpcProfiles.ts', './StoryGeometry.ts', './StoryNavigation.ts', './StoryWork.ts', './StoryEvidence.ts'], function (exports) {
-  var _createForOfIteratorHelperLoose, _extends, cclegacy, lastItem, NPC_PROFILES, lineOfSight, blocked, findCampusPath, votingSuspicion, performNearbyWork, workDestination, observeSighting, observeAttack, inspectEvidence, professionClue, locationName;
+System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './NpcProfiles.ts', './StoryGeometry.ts', './StoryNavigation.ts', './StoryWork.ts', './StoryEvidence.ts'], function (exports) {
+  var _createForOfIteratorHelperLoose, _extends, cclegacy, NPC_PROFILES, lineOfSight, blocked, findCampusPath, votingSuspicion, performNearbyWork, workDestination, observeSighting, observeAttack, inspectEvidence, professionClue, alibiReply, observationStamp, locationName;
   return {
     setters: [function (module) {
       _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
       _extends = module.extends;
     }, function (module) {
       cclegacy = module.cclegacy;
-    }, function (module) {
-      lastItem = module.lastItem;
     }, function (module) {
       NPC_PROFILES = module.NPC_PROFILES;
     }, function (module) {
@@ -3926,6 +3926,8 @@ System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHe
       observeAttack = module.observeAttack;
       inspectEvidence = module.inspectEvidence;
       professionClue = module.professionClue;
+      alibiReply = module.alibiReply;
+      observationStamp = module.observationStamp;
       locationName = module.locationName;
     }],
     execute: function () {
@@ -4031,8 +4033,9 @@ System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHe
           evidence = reply.evidence;
         }
         if (topic === 'alibi') {
-          var previous = lastItem(npc.travels);
-          answer = "\u7B2C" + (room.round || 1) + "\u5929\uFF0C\u6211\u73B0\u5728\u5728" + place(npc) + "\u3002" + (previous ? "\u6211\u4E0A\u4E00\u6B21\u505C\u7559\u7684\u5730\u65B9\u662F" + previous.place + "\uFF0C\u662F\u7B2C" + previous.day + "\u5929\u3002" : '') + (npc.role === 'imposter' ? '之前的动静我没留意，别光盯着我。' : '你可以找附近的人核对。');
+          var _reply = alibiReply(room, npc);
+          answer = _reply.text;
+          evidence = _reply.evidence;
         }
         if (topic === 'help') answer = profile.quip + " " + (room.phase === 'blackout' ? '夜间尽量结伴，明早再核对现场鞋纹。' : '教室拿桌椅、实验室配药、科技大厅控制机器狗。判断前至少交叉核对两条线索。');
         viewer.dialogue = {
@@ -4041,7 +4044,7 @@ System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHe
           job: profile.job,
           topic: topic,
           text: answer,
-          day: room.round,
+          day: room.round || 1,
           evidence: evidence
         };
         (_viewer$journal = viewer.journal) != null ? _viewer$journal : viewer.journal = [];
@@ -4154,10 +4157,9 @@ System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHe
                 z: 0
               };
               if (!prey) {
-                npc.travels.push({
-                  day: room.round,
+                npc.travels.push(_extends({}, observationStamp(room), {
                   place: place(npc)
-                });
+                }));
                 npc.travels = npc.travels.slice(-8);
                 if (!work) npc.visitIndex++;
                 npc.waitUntil = room.now + 8000;
@@ -4217,7 +4219,7 @@ System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHe
 });
 
 System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './HistoryLookup.ts', './StoryGeometry.ts'], function (exports) {
-  var _extends, _createForOfIteratorHelperLoose, cclegacy, lastMatching, lastItem, lineOfSight, NODES;
+  var _extends, _createForOfIteratorHelperLoose, cclegacy, lastItem, lastMatching, lineOfSight, NODES;
   return {
     setters: [function (module) {
       _extends = module.extends;
@@ -4225,15 +4227,17 @@ System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabe
     }, function (module) {
       cclegacy = module.cclegacy;
     }, function (module) {
-      lastMatching = module.lastMatching;
       lastItem = module.lastItem;
+      lastMatching = module.lastMatching;
     }, function (module) {
       lineOfSight = module.lineOfSight;
       NODES = module.NODES;
     }],
     execute: function () {
       exports({
+        alibiReply: alibiReply,
         inspectEvidence: inspectEvidence,
+        observationStamp: observationStamp,
         observeAttack: observeAttack,
         observeInteraction: observeInteraction,
         observeNightSound: observeNightSound,
@@ -4254,7 +4258,7 @@ System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabe
         blackout: '夜间',
         deploy: '抵达'
       };
-      function stamp(room) {
+      function observationStamp(room) {
         var elapsed = Math.max(0, Math.floor((room.now - (room.deadline - room.duration(room.phase))) / 1000));
         return {
           day: room.round || 1,
@@ -4285,7 +4289,7 @@ System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabe
           kind: kind,
           subject: subject,
           subjectId: subjectId
-        }, stamp(room), {
+        }, observationStamp(room), {
           place: locationName(position),
           text: text
         });
@@ -4413,6 +4417,35 @@ System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabe
           time: clock(r),
           place: r.place || null,
           summary: r.text
+        };
+      }
+      // Public speech must not use identity-card branches as a reliable role oracle.
+      function alibiReply(room, npc) {
+        var _previous$elapsed;
+        var current = _extends({}, observationStamp(room), {
+            place: locationName(npc)
+          }),
+          previous = lastItem(npc.travels || []);
+        var records = [_extends({}, current, {
+          text: npc.name + "\u8BF4\u81EA\u5DF1\u73B0\u5728\u5728" + current.place + "\u3002"
+        })];
+        if (previous) records.push(_extends({}, previous, {
+          day: previous.day || 1,
+          elapsed: (_previous$elapsed = previous.elapsed) != null ? _previous$elapsed : null,
+          text: npc.name + "\u8BF4\u4E0A\u4E00\u6B21\u505C\u7559\u5728" + previous.place + "\u3002"
+        }));
+        var text = "\u7B2C" + current.day + "\u5929\uFF0C" + clock(current) + "\uFF0C\u6211\u73B0\u5728\u5728" + current.place + "\u3002" + (previous ? "\u4E0A\u4E00\u6B21\u505C\u7559\u5728" + previous.place + "\uFF0C\u7B2C" + (previous.day || 1) + "\u5929\uFF0C" + clock(previous) + "\u3002" : '') + "\u8FD9\u662F\u6211\u81EA\u5DF1\u7684\u9648\u8FF0\uFF0C\u4F60\u53EF\u4EE5\u627E\u5F53\u65F6\u5728\u9644\u8FD1\u7684\u4EBA\u6216\u88C5\u7F6E\u8BB0\u5F55\u6838\u5BF9\u3002";
+        return {
+          text: text,
+          evidence: records.map(function (record, index) {
+            var _record$elapsed;
+            return card(_extends({}, record, {
+              id: "alibi_" + npc.id + "_" + record.day + "_" + (record.phase || 'unknown') + "_" + ((_record$elapsed = record.elapsed) != null ? _record$elapsed : 'unknown') + "_" + index,
+              kind: 'alibi',
+              source: '本人陈述',
+              subject: npc.name
+            }));
+          })
         };
       }
       function professionClue(npc, day) {
