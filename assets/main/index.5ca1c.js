@@ -548,8 +548,8 @@ System.register("chunks:///_virtual/AvatarVisuals.ts", ['./rollupPluginModLoBabe
   };
 });
 
-System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './FinishCinematic.ts', './SceneEntry.ts', './HudLayout.ts', './ViewCamera.ts', './CampusLighting.ts', './FirstPersonVisuals.ts', './CampusVisuals.ts', './AvatarVisuals.ts', './GameAudio.ts', './WebPlaytest.ts', './EntityVisuals.ts', './GameConnection.ts', './PlayerInput.ts', './GameplayView.ts'], function (exports) {
-  var _inheritsLoose, _createForOfIteratorHelperLoose, _extends, cclegacy, _decorator, profiler, Node, Camera, Color, DirectionalLight, input, Input, view, screen, UITransform, Canvas, Layers, Label, Button, Graphics, Mask, ScrollView, EditBox, ResolutionPolicy, director, sys, KeyCode, Component, FinishCinematic, sceneEntryState, hudViewport, hudLayout, cameraPosition, CampusLighting, FirstPersonVisuals, CampusVisuals, AvatarVisuals, GameAudio, announcePlaytestReady, publicPlaytestEnabled, EntityVisuals, GameConnection, joystickVector, clampPitch, worldMovement, gameStatus, distance3, interactionCommand, aimTarget, abilityCommand, PROGRAM_TUTORIAL, nearestNode;
+System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './NpcProfiles.ts', './FinishCinematic.ts', './SceneEntry.ts', './HudLayout.ts', './ViewCamera.ts', './CampusLighting.ts', './FirstPersonVisuals.ts', './CampusVisuals.ts', './AvatarVisuals.ts', './GameAudio.ts', './WebPlaytest.ts', './EntityVisuals.ts', './GameConnection.ts', './PlayerInput.ts', './GameplayView.ts'], function (exports) {
+  var _inheritsLoose, _createForOfIteratorHelperLoose, _extends, cclegacy, _decorator, profiler, Node, Camera, Color, DirectionalLight, input, Input, view, screen, UITransform, Canvas, Layers, Label, Button, Graphics, Mask, ScrollView, EditBox, ResolutionPolicy, director, sys, KeyCode, Component, TALK_TOPICS, FinishCinematic, sceneEntryState, hudViewport, hudLayout, cameraPosition, CampusLighting, FirstPersonVisuals, CampusVisuals, AvatarVisuals, GameAudio, announcePlaytestReady, publicPlaytestEnabled, EntityVisuals, GameConnection, joystickVector, clampPitch, worldMovement, gameStatus, distance3, interactionCommand, aimTarget, abilityCommand, PROGRAM_TUTORIAL, nearestNode;
   return {
     setters: [function (module) {
       _inheritsLoose = module.inheritsLoose;
@@ -581,6 +581,8 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
       sys = module.sys;
       KeyCode = module.KeyCode;
       Component = module.Component;
+    }, function (module) {
+      TALK_TOPICS = module.TALK_TOPICS;
     }, function (module) {
       FinishCinematic = module.FinishCinematic;
     }, function (module) {
@@ -1118,19 +1120,7 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
             });
             label.node.active = false;
           };
-          for (var _iterator3 = _createForOfIteratorHelperLoose([{
-              id: 'intro',
-              label: '聊聊你自己'
-            }, {
-              id: 'clue',
-              label: '你发现了什么？'
-            }, {
-              id: 'alibi',
-              label: '你刚才在哪里？'
-            }, {
-              id: 'help',
-              label: '下一步怎么办？'
-            }].entries()), _step3; !(_step3 = _iterator3()).done;) {
+          for (var _iterator3 = _createForOfIteratorHelperLoose(TALK_TOPICS.entries()), _step3; !(_step3 = _iterator3()).done;) {
             _loop3();
           }
           this.panel.active = false;
@@ -1308,9 +1298,9 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
           this.candidateLabels.forEach(function (label, i) {
             return _this4.placeHudNode(label.node, p.candidates[i]);
           });
-          ['intro', 'clue', 'alibi', 'help'].forEach(function (id, i) {
+          TALK_TOPICS.forEach(function (topic, i) {
             var _this4$panel;
-            var n = (_this4$panel = _this4.panel) == null ? void 0 : _this4$panel.getChildByName('话题_' + id);
+            var n = (_this4$panel = _this4.panel) == null ? void 0 : _this4$panel.getChildByName('话题_' + topic.id);
             if (n) _this4.placeHudNode(n, p.topics[i]);
           });
           for (var _iterator5 = _createForOfIteratorHelperLoose(this.panel.children), _step5; !(_step5 = _iterator5()).done;) {
@@ -1577,7 +1567,7 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
           } else if (this.panelMode === 'dialogue') {
             var d = snapshot == null ? void 0 : snapshot.self.dialogue;
             this.panelText.string = d ? [d.name + ' · ' + d.job, d.text].concat((d.evidence || []).map(function (e) {
-              return e.source + ' · 第' + e.day + '天 ' + e.time + ' · ' + e.place;
+              return e.source + ' · 第' + e.day + '天 ' + e.time + ' · ' + (e.place || '未知地点') + '\n' + e.summary;
             })).join('\n') : '请靠近人物交谈';
           } else if (this.panelMode === 'program') this.panelText.string = PROGRAM_TUTORIAL;else if (this.panelMode === 'players') this.panelText.string = (snapshot == null ? void 0 : snapshot.phase) === 'meeting' ? "\u9EC4\u660F\u8BA8\u8BBA \xB7 \u5269\u4F59 " + snapshot.remaining + " \u79D2\n\u6700\u540E15\u79D2\u70B9\u51FB\u73A9\u5BB6\u6295\u7968 \xB7 \u5F53\u524D\u6295\u7968 " + (((_candidates$find = candidates.find(function (p) {
             return p.id === snapshot.self.vote;
@@ -3181,11 +3171,13 @@ System.register("chunks:///_virtual/HistoryLookup.ts", ['cc'], function (exports
   };
 });
 
-System.register("chunks:///_virtual/HudLayout.ts", ['cc'], function (exports) {
-  var cclegacy;
+System.register("chunks:///_virtual/HudLayout.ts", ['cc', './NpcProfiles.ts'], function (exports) {
+  var cclegacy, TALK_TOPICS;
   return {
     setters: [function (module) {
       cclegacy = module.cclegacy;
+    }, function (module) {
+      TALK_TOPICS = module.TALK_TOPICS;
     }],
     execute: function () {
       exports({
@@ -3193,8 +3185,6 @@ System.register("chunks:///_virtual/HudLayout.ts", ['cc'], function (exports) {
         hudViewport: hudViewport
       });
       cclegacy._RF.push({}, "42beedQxTpDyoisMWtXcf8V", "HudLayout", undefined);
-      // @ts-nocheck
-      // Generated by tools/sync_cocos_story.mjs from shared/hud_layout.js; edit the source.
       /** Logical pixel layout shared with Creator; no gameplay or browser dependencies. */
       function hudViewport(width, height) {
         var scale = Math.max(1, width / 1280, height / 720);
@@ -3326,10 +3316,10 @@ System.register("chunks:///_virtual/HudLayout.ts", ['cc'], function (exports) {
           font: 16
         });
         var topicY = -ph / 2 + 88;
-        for (var _i = 0; _i < 4; _i++) panel.topics.push({
-          x: -pw / 2 + (_i + .5) * pw / 4,
+        for (var _i = 0; _i < TALK_TOPICS.length; _i++) panel.topics.push({
+          x: -pw / 2 + (_i + .5) * pw / TALK_TOPICS.length,
           y: topicY,
-          width: pw / 4 - 8,
+          width: pw / TALK_TOPICS.length - 8,
           height: 44,
           font: 16
         });
@@ -3500,6 +3490,9 @@ System.register("chunks:///_virtual/NpcProfiles.ts", ['cc'], function (exports) 
       }, {
         id: 'alibi',
         label: '你刚才在哪里？'
+      }, {
+        id: 'reason',
+        label: '你怀疑谁？为什么？'
       }, {
         id: 'help',
         label: '下一步怎么办？'
@@ -3903,7 +3896,7 @@ System.register("chunks:///_virtual/SceneEntry.ts", ['cc'], function (exports) {
 });
 
 System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './NpcProfiles.ts', './StoryGeometry.ts', './StoryNavigation.ts', './StoryWork.ts', './StoryEvidence.ts'], function (exports) {
-  var _createForOfIteratorHelperLoose, _extends, cclegacy, NPC_PROFILES, lineOfSight, blocked, findCampusPath, votingSuspicion, performNearbyWork, workDestination, observeSighting, observeAttack, inspectEvidence, professionClue, alibiReply, observationStamp, locationName;
+  var _createForOfIteratorHelperLoose, _extends, cclegacy, NPC_PROFILES, lineOfSight, blocked, findCampusPath, suspicionReply, chooseVoteTarget, performNearbyWork, workDestination, observeSighting, observeAttack, inspectEvidence, professionClue, alibiReply, observationStamp, locationName;
   return {
     setters: [function (module) {
       _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
@@ -3918,7 +3911,8 @@ System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHe
     }, function (module) {
       findCampusPath = module.findCampusPath;
     }, function (module) {
-      votingSuspicion = module.votingSuspicion;
+      suspicionReply = module.suspicionReply;
+      chooseVoteTarget = module.chooseVoteTarget;
       performNearbyWork = module.performNearbyWork;
       workDestination = module.workDestination;
     }, function (module) {
@@ -4023,7 +4017,7 @@ System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHe
         if (!npc || dist(viewer, npc) > 3 || !lineOfSight(viewer, npc)) throw Error('请靠近同层人物，在三米内交谈');
         var topic = message.topic || 'intro',
           profile = npc.profile;
-        if (!profile || !['intro', 'clue', 'alibi', 'help'].includes(topic)) throw Error('话题无效');
+        if (!profile || !['intro', 'clue', 'alibi', 'reason', 'help'].includes(topic)) throw Error('话题无效');
         var answer = profile.intro,
           evidence = [];
         if (topic === 'clue') {
@@ -4036,6 +4030,14 @@ System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHe
           var _reply = alibiReply(room, npc);
           answer = _reply.text;
           evidence = _reply.evidence;
+        }
+        if (topic === 'reason') {
+          inspectEvidence(room, npc);
+          var _reply2 = suspicionReply(npc, room.players.filter(function (p) {
+            return p.alive && p !== npc;
+          }));
+          answer = _reply2.text;
+          evidence = _reply2.evidence;
         }
         if (topic === 'help') answer = profile.quip + " " + (room.phase === 'blackout' ? '夜间尽量结伴，明早再核对现场鞋纹。' : '教室拿桌椅、实验室配药、科技大厅控制机器狗。判断前至少交叉核对两条线索。');
         viewer.dialogue = {
@@ -4075,13 +4077,10 @@ System.register("chunks:///_virtual/StoryBrain.ts", ['./rollupPluginModLoBabelHe
                 z: 0
               };
               if (room.now >= room.deadline - 15000) {
-                var candidates = room.players.filter(function (p) {
+                var target = chooseVoteTarget(npc, room.players.filter(function (p) {
                   return p.alive && p !== npc;
-                }).sort(function (a, b) {
-                  return votingSuspicion(npc, b) - votingSuspicion(npc, a);
-                });
-                var target = candidates[0];
-                npc.vote = target && votingSuspicion(npc, target) >= 3 ? target.id : null;
+                }));
+                npc.vote = (target == null ? void 0 : target.id) || null;
               }
               return 0; // continue
             }
@@ -4236,6 +4235,7 @@ System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabe
     execute: function () {
       exports({
         alibiReply: alibiReply,
+        evidenceCard: evidenceCard,
         inspectEvidence: inspectEvidence,
         observationStamp: observationStamp,
         observeAttack: observeAttack,
@@ -4291,6 +4291,11 @@ System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabe
           subjectId: subjectId
         }, observationStamp(room), {
           place: locationName(position),
+          position: {
+            x: position.x,
+            y: position.y || 0,
+            z: position.z
+          },
           text: text
         });
       }
@@ -4326,12 +4331,14 @@ System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabe
       }
       function observeSighting(room, subject) {
         if (!room.singlePlayer) return;
-        var base = record(room, 'sighting', subject.name, subject, "\u6211\u5728" + locationName(subject) + "\u4EB2\u773C\u89C1\u5230\u4E86" + subject.name + "\u3002", subject.id);
+        var shoe = ['横纹', '菱纹', '断纹', '点纹'][subject.signature];
+        var base = record(room, 'sighting', subject.name, subject, "\u6211\u5728" + locationName(subject) + "\u4EB2\u773C\u89C1\u5230\u4E86" + subject.name + (shoe ? "\uFF0C\u978B\u5E95\u662F" + shoe : '') + "\u3002", subject.id);
         for (var _iterator2 = _createForOfIteratorHelperLoose(room.players.filter(function (p) {
             return p.bot && p.alive && p !== subject && distance(p, subject) < 12 && lineOfSight(p, subject);
           })), _step2; !(_step2 = _iterator2()).done;) {
           var npc = _step2.value;
           storeObservation(npc, _extends({}, base, {
+            shoe: shoe,
             source: '亲眼目击'
           }));
         }
@@ -4389,6 +4396,7 @@ System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabe
         }
         if (['soldier', 'security', 'researcher'].includes((_npc$profile2 = npc.profile) == null ? void 0 : _npc$profile2.id)) {
           for (var _iterator6 = _createForOfIteratorHelperLoose(room.traces), _step6; !(_step6 = _iterator6()).done;) {
+            var _exec;
             var trace = _step6.value;
             if (distance(npc, trace) < 3 && lineOfSight(npc, trace)) storeObservation(npc, {
               id: "trace_" + trace.id,
@@ -4397,8 +4405,14 @@ System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabe
               subject: null,
               day: trace.day,
               phase: '夜间',
-              elapsed: null,
+              elapsed: Number.isFinite(trace.elapsed) ? trace.elapsed : null,
               place: locationName(trace),
+              position: {
+                x: trace.x,
+                y: trace.y || 0,
+                z: trace.z
+              },
+              shoe: ((_exec = /泥痕鞋纹 (横纹|菱纹|断纹|点纹)/.exec(trace.text)) == null ? void 0 : _exec[1]) || null,
               text: trace.text
             });
           }
@@ -4407,7 +4421,7 @@ System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabe
       var clock = function clock(r) {
         return r.elapsed == null ? '未记录准确时刻' : (r.phase || '调查') + " " + String(Math.floor(r.elapsed / 60)).padStart(2, '0') + ":" + String(r.elapsed % 60).padStart(2, '0');
       };
-      function card(r) {
+      function evidenceCard(r) {
         return {
           id: r.id || null,
           kind: r.kind,
@@ -4419,6 +4433,7 @@ System.register("chunks:///_virtual/StoryEvidence.ts", ['./rollupPluginModLoBabe
           summary: r.text
         };
       }
+      var card = evidenceCard;
       // Public speech must not use identity-card branches as a reliable role oracle.
       function alibiReply(room, npc) {
         var _previous$elapsed;
@@ -5156,7 +5171,7 @@ System.register("chunks:///_virtual/StoryNavigationData.ts", ['cc'], function (e
 });
 
 System.register("chunks:///_virtual/StoryRules.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './StoryBrain.ts', './StoryEvidence.ts', './StoryGeometry.ts', './Protocol.ts'], function (exports) {
-  var _extends, _createForOfIteratorHelperLoose, cclegacy, talk, rememberWitnesses, tickNpcs, observeInteraction, observeNightSound, lineOfSight, blocked, surface, NODES, SNACK_STATION, RULES_VERSION;
+  var _extends, _createForOfIteratorHelperLoose, cclegacy, talk, rememberWitnesses, tickNpcs, observeInteraction, observeNightSound, observeSighting, observationStamp, lineOfSight, blocked, surface, NODES, SNACK_STATION, RULES_VERSION;
   return {
     setters: [function (module) {
       _extends = module.extends;
@@ -5170,6 +5185,8 @@ System.register("chunks:///_virtual/StoryRules.ts", ['./rollupPluginModLoBabelHe
     }, function (module) {
       observeInteraction = module.observeInteraction;
       observeNightSound = module.observeNightSound;
+      observeSighting = module.observeSighting;
+      observationStamp = module.observationStamp;
     }, function (module) {
       lineOfSight = module.lineOfSight;
       blocked = module.blocked;
@@ -5524,6 +5541,7 @@ System.register("chunks:///_virtual/StoryRules.ts", ['./rollupPluginModLoBabelHe
             if (m.type === 'attack') {
               this.log('夜色里传来短促的异常拖拽声');
               observeNightSound(this, p);
+              observeSighting(this, p);
             }
             p.action = {
               type: m.type,
@@ -5758,6 +5776,7 @@ System.register("chunks:///_virtual/StoryRules.ts", ['./rollupPluginModLoBabelHe
                     y: t.y,
                     z: t.z,
                     day: _this.round,
+                    elapsed: observationStamp(_this).elapsed,
                     text: "\u6CE5\u75D5\u978B\u7EB9 " + ['横纹', '菱纹', '断纹', '点纹'][p.signature] + " \xB7 \u5F53\u591C " + _this.round + " \xB7 \u88AD\u51FB\u4F4D\u7F6E"
                   });
                   _this.log('发现一处袭击痕迹，可前往现场检查');
@@ -6030,20 +6049,27 @@ System.register("chunks:///_virtual/StoryRules.ts", ['./rollupPluginModLoBabelHe
   };
 });
 
-System.register("chunks:///_virtual/StoryWork.ts", ['cc', './HistoryLookup.ts', './StoryGeometry.ts'], function (exports) {
-  var cclegacy, lastMatching, SNACK_STATION, lineOfSight;
+System.register("chunks:///_virtual/StoryWork.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './HistoryLookup.ts', './StoryGeometry.ts', './StoryEvidence.ts'], function (exports) {
+  var _extends, _createForOfIteratorHelperLoose, cclegacy, lastMatching, SNACK_STATION, lineOfSight, evidenceCard;
   return {
     setters: [function (module) {
+      _extends = module.extends;
+      _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
+    }, function (module) {
       cclegacy = module.cclegacy;
     }, function (module) {
       lastMatching = module.lastMatching;
     }, function (module) {
       SNACK_STATION = module.SNACK_STATION;
       lineOfSight = module.lineOfSight;
+    }, function (module) {
+      evidenceCard = module.evidenceCard;
     }],
     execute: function () {
       exports({
+        chooseVoteTarget: chooseVoteTarget,
         performNearbyWork: performNearbyWork,
+        suspicionReply: suspicionReply,
         votingSuspicion: votingSuspicion,
         workDestination: workDestination
       });
@@ -6140,7 +6166,7 @@ System.register("chunks:///_virtual/StoryWork.ts", ['cc', './HistoryLookup.ts', 
         })) return false;
         if (goal.id === 2 && room.phase === 'explore' && npc.role === 'seer' && npc.scannedDay !== room.round) {
           var targets = knownTargets(room, npc).sort(function (a, b) {
-            return (npc.suspicion[b.id] || 0) - (npc.suspicion[a.id] || 0);
+            return votingSuspicion(npc, b) - votingSuspicion(npc, a);
           });
           if (targets.length) {
             room.command(npc, {
@@ -6160,11 +6186,111 @@ System.register("chunks:///_virtual/StoryWork.ts", ['cc', './HistoryLookup.ts', 
         });
         return true;
       }
+      function circumstantialEvidence(npc, target) {
+        var memory = npc.memory || [],
+          sightings = memory.filter(function (m) {
+            return m.kind === 'sighting' && m.subjectId === target.id && m.source === '亲眼目击';
+          });
+        var score = 0,
+          records = [];
+        var _loop = function _loop() {
+          var trace = _step.value;
+          var sameShoe = lastMatching(sightings, function (s) {
+            return s.shoe === trace.shoe && s.day === trace.day;
+          });
+          if (!sameShoe) return 1; // continue
+          if (score < 1) {
+            score = 1;
+            records = [sameShoe, trace];
+          } // Common shoes cannot identify a person.
+          var nearby = lastMatching(sightings, function (s) {
+            return s.shoe === trace.shoe && s.day === trace.day && s.phase === '夜间' && Number.isFinite(s.elapsed) && Number.isFinite(trace.elapsed) && Math.abs(s.elapsed - trace.elapsed) <= 20 && s.position && trace.position && Math.abs(s.position.y - trace.position.y) < 1.5 && distance(s.position, trace.position) <= 6;
+          });
+          if (nearby) {
+            score = 3;
+            records = [nearby, trace];
+          }
+        };
+        for (var _iterator = _createForOfIteratorHelperLoose(memory.filter(function (m) {
+            return m.kind === 'trace' && m.source === '现场痕迹' && m.shoe;
+          })), _step; !(_step = _iterator()).done;) {
+          if (_loop()) continue;
+        }
+        return {
+          score: score,
+          records: records
+        };
+      }
       function votingSuspicion(npc, target) {
         var verified = lastMatching(npc.scanResults, function (r) {
           return r.id === target.id;
         });
-        return verified ? verified.camp === '伪人' ? 100 : 0 : npc.suspicion[target.id] || 0;
+        if (verified) return verified.camp === '伪人' ? 100 : 0;
+        return Math.max(npc.suspicion[target.id] || 0, circumstantialEvidence(npc, target).score);
+      }
+      // Explain only independently shareable observations; private scans and votes stay private.
+      function suspicionReply(npc, candidates) {
+        var ranked = candidates.map(function (target) {
+          var witnessed = lastMatching(npc.memory || [], function (m) {
+            return m.kind === 'witness' && m.subjectId === target.id && m.source === '亲眼目击';
+          });
+          return _extends({
+            target: target
+          }, witnessed ? {
+            score: 3,
+            records: [witnessed]
+          } : circumstantialEvidence(npc, target));
+        }).filter(function (entry) {
+          return entry.score > 0;
+        }).sort(function (a, b) {
+          return b.score - a.score;
+        });
+        if (!ranked.length) return {
+          text: '我目前没有能公开核对的嫌疑证据。先找目击者、现场痕迹或装置记录，别急着凭职业和打扮定身份。',
+          evidence: []
+        };
+        if (ranked[0].score < 3) return {
+          text: '我只找到相似鞋纹。鞋底花纹会重复，时间或地点还对不上；这不足以指认任何人。',
+          evidence: ranked[0].records.map(evidenceCard)
+        };
+        var strongest = ranked.filter(function (entry) {
+          return entry.score === ranked[0].score;
+        });
+        if (strongest.length > 1) return {
+          text: strongest.map(function (entry) {
+            return entry.target.name;
+          }).join('、') + "\u90FD\u6709\u540C\u7B49\u5F3A\u5EA6\u7684\u53EF\u6838\u5BF9\u7EBF\u7D22\uFF0C\u6211\u8FD8\u5206\u4E0D\u6E05\uFF0C\u4E0D\u80FD\u968F\u4FBF\u6307\u8BA4\u3002\u7EE7\u7EED\u6838\u5BF9\u76EE\u51FB\u65F6\u95F4\u3001\u5730\u70B9\u548C\u72EC\u7ACB\u8BB0\u5F55\u3002",
+          evidence: strongest.slice(0, 3).flatMap(function (entry) {
+            return entry.records;
+          }).filter(function (entry, index, all) {
+            return all.indexOf(entry) === index;
+          }).map(evidenceCard)
+        };
+        var _strongest$ = strongest[0],
+          target = _strongest$.target,
+          records = _strongest$.records,
+          witnessed = records[0].kind === 'witness';
+        return {
+          text: "\u6211\u4F1A\u5148\u6838\u5BF9" + target.name + "\u3002" + (witnessed ? '我亲眼见过其攻击他人，但攻击行为本身不能证明身份。' : "\u4EB2\u773C\u8BB0\u5F55\u4E0E\u73B0\u573A\u75D5\u8FF9\u7684" + records[1].shoe + "\u978B\u7EB9\u76F8\u7B26\uFF0C\u540C\u4E00\u591C\u76F8\u5DEE" + Math.abs(records[0].elapsed - records[1].elapsed) + "\u79D2\uFF0C\u4F4D\u7F6E\u4E5F\u5728\u540C\u4E00\u5C42\u9644\u8FD1\u3002\u8FD9\u662F\u95F4\u63A5\u5ACC\u7591\uFF0C\u4E0D\u80FD\u5F53\u6210\u67E5\u9A8C\u7ED3\u679C\u3002") + " " + records.map(function (r) {
+            return "\u7B2C" + r.day + "\u5929\uFF0C" + evidenceCard(r).time + "\uFF0C" + r.text;
+          }).join(' ') + "\u518D\u627E\u72EC\u7ACB\u8BC1\u8BCD\uFF0C\u522B\u53EA\u51ED\u6211\u7684\u5224\u65AD\u3002",
+          evidence: records.map(evidenceCard)
+        };
+      }
+      function chooseVoteTarget(npc, candidates) {
+        var _ranked$;
+        var ranked = candidates.map(function (target) {
+          return {
+            target: target,
+            score: votingSuspicion(npc, target)
+          };
+        }).sort(function (a, b) {
+          return b.score - a.score;
+        });
+        if (!ranked.length || ranked[0].score < 3) return null;
+        // Ambiguous circumstantial evidence should not select whoever happens to be first.
+        if (ranked[0].score < 100 && ((_ranked$ = ranked[1]) == null ? void 0 : _ranked$.score) === ranked[0].score) return null;
+        return ranked[0].target;
       }
       cclegacy._RF.pop();
     }

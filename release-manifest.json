@@ -1,5 +1,5 @@
 {
-  "version": "web-playtest-2026-10-06.2",
+  "version": "web-playtest-2026-10-07.1",
   "mode": "single-player",
   "characters": "profession-v0.7",
   "files": [
@@ -16,7 +16,7 @@
     {
       "path": "README.md",
       "bytes": 1191,
-      "sha256": "74febb950360d1795911cc96f7aaa51955cdf45831da41778586e20678117c40"
+      "sha256": "473f2435a9ea064bfc41091d49704f16d18fca790f58c72725b94e2cc3259801"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",
@@ -24,9 +24,9 @@
       "sha256": "bd6d4454d2e8cc87966cba9f70e51ed0fea507f08352f02d63bdfc9bc76875a4"
     },
     {
-      "path": "application.9fdbd.js",
+      "path": "application.5544c.js",
       "bytes": 3306,
-      "sha256": "1eed2721fa0799634bd9f60ec9fe2f706de554e9fcea3f2e783b66abf444bde0"
+      "sha256": "cc8d2d4091fb22f7a23038a9a8bd9da14e52b741eac4800f8cd3bb25da3f7a65"
     },
     {
       "path": "assets/campus_desktop/config.bb654.json",
@@ -5544,7 +5544,7 @@
       "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
     },
     {
-      "path": "assets/main/config.36d96.json",
+      "path": "assets/main/config.5ca1c.json",
       "bytes": 1330,
       "sha256": "7c719998ef917de035a57cbf0a16323fc0944527c0c776b1f1df2daa4b8d634e"
     },
@@ -5559,9 +5559,9 @@
       "sha256": "c2eee4552a460ed97591f527e127b95c811d5f796b9448f3f705974af9beba9d"
     },
     {
-      "path": "assets/main/index.36d96.js",
-      "bytes": 543046,
-      "sha256": "47c473f7ce5de82cf6f601d5bdcb29ff74a7f0c4ed9dcf0f810f8152d418efec"
+      "path": "assets/main/index.5ca1c.js",
+      "bytes": 549798,
+      "sha256": "3870cde4b5bae09c1d5c905f9fae765be10241db864d640520277e91673b4d67"
     },
     {
       "path": "assets/resources/config.b0c5e.json",
@@ -6809,14 +6809,14 @@
       "sha256": "0ee6ea35321de21db85992f64e4b846def7abac1222fa2250318878396df988e"
     },
     {
-      "path": "index.f2c08.js",
+      "path": "index.7b275.js",
       "bytes": 614,
-      "sha256": "49a3ae8189562ae04e3a727fb4ceb61009df5209f71491cc3e6c2f104c709c97"
+      "sha256": "9a0fcdf4c9fc74084cf650fb0ca02d9372cd6136a7f839158d6380d483ce9e4b"
     },
     {
       "path": "index.html",
       "bytes": 3602,
-      "sha256": "7a87dd6aff5a4575b50ac43faeb67e9944edb13096f9360136ca124fc97d2190"
+      "sha256": "17b00eafb240b029db7c71a1cfabbb44a7bc32827373fda51ea63f549e390abc"
     },
     {
       "path": "licenses/Cocos-third-party/EDITOR_license_and_terms_en.txt",
@@ -7029,9 +7029,9 @@
       "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
     },
     {
-      "path": "src/settings.b8e30.json",
+      "path": "src/settings.66679.json",
       "bytes": 23562,
-      "sha256": "6e4edf64d0670de9cc2f8a46d6c71f5431a51190d85578860f667f8e850fe6e1"
+      "sha256": "962025c072acace821ba38839ea7e3c90ae50c5fdeeebdfeb8fb9e1ae9db5ba4"
     },
     {
       "path": "src/system.bundle.cc789.js",
@@ -7044,5 +7044,5 @@
       "sha256": "c084ae5cc6199465cc151b31b3e8d75f48a5a099f2bd78ea80c37d1090618d23"
     }
   ],
-  "totalBytes": 210393673
+  "totalBytes": 210400425
 }
