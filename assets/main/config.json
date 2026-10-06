@@ -1,0 +1,46 @@
+{
+    "importBase": "import",
+    "nativeBase": "native",
+    "name": "main",
+    "deps": [
+        "internal"
+    ],
+    "uuids": [
+        "62ae05cf-fe2e-49e8-9b82-f3573887c2b9",
+        "ba21476f-2866-4f81-9c4d-6e359316e448",
+        "fd8ec536-a354-4a17-9c74-4f3883c378c8"
+    ],
+    "paths": {
+        "62ae05cf-fe2e-49e8-9b82-f3573887c2b9": [
+            "db:/assets/scenes/Campus",
+            "cc.SceneAsset",
+            1
+        ],
+        "fd8ec536-a354-4a17-9c74-4f3883c378c8": [
+            "db:/internal/default_renderpipeline/builtin-forward",
+            "cc.RenderPipeline",
+            1
+        ],
+        "ba21476f-2866-4f81-9c4d-6e359316e448": [
+            "db:/internal/physics/default-physics-material",
+            "cc.PhysicsMaterial",
+            1
+        ]
+    },
+    "scenes": {
+        "db://assets/scenes/Campus.scene": "62ae05cf-fe2e-49e8-9b82-f3573887c2b9"
+    },
+    "packs": {},
+    "versions": {
+        "import": [],
+        "native": []
+    },
+    "redirect": [
+        "ba21476f-2866-4f81-9c4d-6e359316e448",
+        "0"
+    ],
+    "debug": true,
+    "extensionMap": {},
+    "hasPreloadScript": true,
+    "dependencyRelationships": {}
+}
