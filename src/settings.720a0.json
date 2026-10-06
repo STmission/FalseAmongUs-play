@@ -57,7 +57,14 @@
                 "bundle": "main"
             }
         ],
-        "bundleVers": {},
+        "bundleVers": {
+            "campus_desktop": "bb654",
+            "campus_mobile": "64270",
+            "campus_professions": "51094",
+            "internal": "5623c",
+            "main": "5a200",
+            "resources": "b0c5e"
+        },
         "preloadAssets": [],
         "projectBundles": [
             "internal",
@@ -74,7 +81,7 @@
     },
     "scripting": {
         "scriptPackages": [
-            "../src/chunks/bundle.js"
+            "../src/chunks/bundle.2178b.js"
         ]
     },
     "launch": {

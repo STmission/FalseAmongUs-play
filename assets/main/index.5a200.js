@@ -549,7 +549,7 @@ System.register("chunks:///_virtual/AvatarVisuals.ts", ['./rollupPluginModLoBabe
 });
 
 System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './FinishCinematic.ts', './SceneEntry.ts', './HudLayout.ts', './ViewCamera.ts', './CampusLighting.ts', './FirstPersonVisuals.ts', './CampusVisuals.ts', './AvatarVisuals.ts', './GameAudio.ts', './WebPlaytest.ts', './EntityVisuals.ts', './GameConnection.ts', './PlayerInput.ts', './GameplayView.ts'], function (exports) {
-  var _inheritsLoose, _createForOfIteratorHelperLoose, _extends, cclegacy, _decorator, profiler, Node, Camera, Color, DirectionalLight, input, Input, view, screen, UITransform, Canvas, Layers, Label, Button, Graphics, Mask, ScrollView, EditBox, ResolutionPolicy, director, sys, KeyCode, Component, FinishCinematic, sceneEntryState, hudViewport, hudLayout, cameraPosition, CampusLighting, FirstPersonVisuals, CampusVisuals, AvatarVisuals, GameAudio, publicPlaytestEnabled, EntityVisuals, GameConnection, joystickVector, clampPitch, worldMovement, gameStatus, distance3, interactionCommand, aimTarget, abilityCommand, PROGRAM_TUTORIAL, nearestNode;
+  var _inheritsLoose, _createForOfIteratorHelperLoose, _extends, cclegacy, _decorator, profiler, Node, Camera, Color, DirectionalLight, input, Input, view, screen, UITransform, Canvas, Layers, Label, Button, Graphics, Mask, ScrollView, EditBox, ResolutionPolicy, director, sys, KeyCode, Component, FinishCinematic, sceneEntryState, hudViewport, hudLayout, cameraPosition, CampusLighting, FirstPersonVisuals, CampusVisuals, AvatarVisuals, GameAudio, announcePlaytestReady, publicPlaytestEnabled, EntityVisuals, GameConnection, joystickVector, clampPitch, worldMovement, gameStatus, distance3, interactionCommand, aimTarget, abilityCommand, PROGRAM_TUTORIAL, nearestNode;
   return {
     setters: [function (module) {
       _inheritsLoose = module.inheritsLoose;
@@ -601,6 +601,7 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
     }, function (module) {
       GameAudio = module.GameAudio;
     }, function (module) {
+      announcePlaytestReady = module.announcePlaytestReady;
       publicPlaytestEnabled = module.publicPlaytestEnabled;
     }, function (module) {
       EntityVisuals = module.EntityVisuals;
@@ -775,6 +776,7 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
           input.on(Input.EventType.MOUSE_UP, this.mouseUp, this);
           view.on('canvas-resize', this.resizeHud, this);
           screen.on('window-resize', this.resizeHud, this);
+          announcePlaytestReady();
         };
         _proto.notice = function notice(text) {
           if (this.feedback) {
@@ -1772,8 +1774,8 @@ System.register("chunks:///_virtual/CampusLighting.ts", ['./rollupPluginModLoBab
   };
 });
 
-System.register("chunks:///_virtual/CampusVisuals.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
-  var _createClass, _asyncToGenerator, _regeneratorRuntime, cclegacy, settings, sys, instantiate, MeshRenderer, assetManager, Prefab, director, Director;
+System.register("chunks:///_virtual/CampusVisuals.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './WebPlaytest.ts'], function (exports) {
+  var _createClass, _asyncToGenerator, _regeneratorRuntime, cclegacy, settings, sys, instantiate, MeshRenderer, assetManager, Prefab, director, Director, publicPlaytestEnabled;
   return {
     setters: [function (module) {
       _createClass = module.createClass;
@@ -1789,6 +1791,8 @@ System.register("chunks:///_virtual/CampusVisuals.ts", ['./rollupPluginModLoBabe
       Prefab = module.Prefab;
       director = module.director;
       Director = module.Director;
+    }, function (module) {
+      publicPlaytestEnabled = module.publicPlaytestEnabled;
     }],
     execute: function () {
       cclegacy._RF.push({}, "f3c15YrhuFLFb97uwPDjoOv", "CampusVisuals", undefined);
@@ -1816,7 +1820,7 @@ System.register("chunks:///_virtual/CampusVisuals.ts", ['./rollupPluginModLoBabe
             return bundles.indexOf('campus_' + q) >= 0;
           }) : ['desktop', 'mobile'];
           var saved = sys.localStorage.getItem('campus-quality'),
-            preferred = saved === 'desktop' || saved === 'mobile' ? saved : sys.isMobile ? 'mobile' : 'desktop';
+            preferred = publicPlaytestEnabled() ? 'mobile' : saved === 'desktop' || saved === 'mobile' ? saved : sys.isMobile ? 'mobile' : 'desktop';
           this.requested = this.available.indexOf(preferred) >= 0 ? preferred : this.available[0] || 'mobile';
           this.pump();
         }
@@ -6249,12 +6253,19 @@ System.register("chunks:///_virtual/WebPlaytest.ts", ['cc'], function (exports) 
       sys = module.sys;
     }],
     execute: function () {
-      exports('publicPlaytestEnabled', publicPlaytestEnabled);
+      exports({
+        announcePlaytestReady: announcePlaytestReady,
+        publicPlaytestEnabled: publicPlaytestEnabled
+      });
       cclegacy._RF.push({}, "1b9cdLa/upN8IUCFEUX6Br1", "WebPlaytest", undefined);
       /** Set by the static release entry; local/native clients keep their own modes. */
       function publicPlaytestEnabled() {
         var _CAMPUS_WEB_RELEASE;
         return sys.isBrowser && ((_CAMPUS_WEB_RELEASE = globalThis.CAMPUS_WEB_RELEASE) == null ? void 0 : _CAMPUS_WEB_RELEASE.singlePlayerOnly) === true;
+      }
+      function announcePlaytestReady() {
+        var page = globalThis;
+        if (publicPlaytestEnabled() && page.dispatchEvent && page.Event) page.dispatchEvent(new page.Event('campus-ui-ready'));
       }
       cclegacy._RF.pop();
     }
