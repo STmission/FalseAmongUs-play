@@ -1,5 +1,5 @@
 {
-  "version": "web-playtest-2026-10-07.1",
+  "version": "web-playtest-2026-10-07.3",
   "mode": "single-player",
   "characters": "profession-v0.7",
   "files": [
@@ -16,7 +16,7 @@
     {
       "path": "README.md",
       "bytes": 1191,
-      "sha256": "473f2435a9ea064bfc41091d49704f16d18fca790f58c72725b94e2cc3259801"
+      "sha256": "1e41e067bfa87f795eb73394108149412c8c4143057d9bf0a51b539df5e6191d"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",
@@ -24,9 +24,9 @@
       "sha256": "bd6d4454d2e8cc87966cba9f70e51ed0fea507f08352f02d63bdfc9bc76875a4"
     },
     {
-      "path": "application.5544c.js",
+      "path": "application.e898d.js",
       "bytes": 3306,
-      "sha256": "cc8d2d4091fb22f7a23038a9a8bd9da14e52b741eac4800f8cd3bb25da3f7a65"
+      "sha256": "7043e0a92bed566d9500d09b2b542a281b6f811a94fe16ef5d7dd69bacf5c7cc"
     },
     {
       "path": "assets/campus_desktop/config.bb654.json",
@@ -5544,7 +5544,7 @@
       "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
     },
     {
-      "path": "assets/main/config.5ca1c.json",
+      "path": "assets/main/config.8948c.json",
       "bytes": 1330,
       "sha256": "7c719998ef917de035a57cbf0a16323fc0944527c0c776b1f1df2daa4b8d634e"
     },
@@ -5559,9 +5559,9 @@
       "sha256": "c2eee4552a460ed97591f527e127b95c811d5f796b9448f3f705974af9beba9d"
     },
     {
-      "path": "assets/main/index.5ca1c.js",
-      "bytes": 549798,
-      "sha256": "3870cde4b5bae09c1d5c905f9fae765be10241db864d640520277e91673b4d67"
+      "path": "assets/main/index.8948c.js",
+      "bytes": 557778,
+      "sha256": "a2a379dd6a3aee91e5b3b9a6ad25f00eab824dfe45201c39b847b80ecfdfa705"
     },
     {
       "path": "assets/resources/config.b0c5e.json",
@@ -6809,14 +6809,14 @@
       "sha256": "0ee6ea35321de21db85992f64e4b846def7abac1222fa2250318878396df988e"
     },
     {
-      "path": "index.7b275.js",
+      "path": "index.d0d08.js",
       "bytes": 614,
-      "sha256": "9a0fcdf4c9fc74084cf650fb0ca02d9372cd6136a7f839158d6380d483ce9e4b"
+      "sha256": "56ae179965ec9a9d27a0e1617e0259f5456fec829f59877d08a595a9d9d1b4f9"
     },
     {
       "path": "index.html",
-      "bytes": 3602,
-      "sha256": "17b00eafb240b029db7c71a1cfabbb44a7bc32827373fda51ea63f549e390abc"
+      "bytes": 3659,
+      "sha256": "89eb8d104348a272ea3a3ba055b1f1fdbce2409bd57bc415740857883dc76fc0"
     },
     {
       "path": "licenses/Cocos-third-party/EDITOR_license_and_terms_en.txt",
@@ -7009,6 +7009,16 @@
       "sha256": "f6089cba01cb570a24712b41ab8a586ccd3cc5ef53dc266ca50b95c288956d2c"
     },
     {
+      "path": "native-aliases-report.json",
+      "bytes": 73402,
+      "sha256": "cb49d59c544f14430155c981acbccd763c415cf47734bb15732f12944dcb739a"
+    },
+    {
+      "path": "native-aliases.2878fe1cad10.js",
+      "bytes": 70425,
+      "sha256": "2a7d6902818b2faca1908af92b22395f13c1ef8535b3a0d473dd386b9f9a8ce5"
+    },
+    {
       "path": "src/chunks/bundle.2178b.js",
       "bytes": 22524,
       "sha256": "fb0d6d3a84e27f4a8c564419dc043bc2bbff0b65cc155373af24250ac1d2e6fb"
@@ -7029,9 +7039,9 @@
       "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
     },
     {
-      "path": "src/settings.66679.json",
+      "path": "src/settings.65ea8.json",
       "bytes": 23562,
-      "sha256": "962025c072acace821ba38839ea7e3c90ae50c5fdeeebdfeb8fb9e1ae9db5ba4"
+      "sha256": "d824876cbd162b0521b661ee1bacb2f6403d39738ae1a40d0722e82643efe142"
     },
     {
       "path": "src/system.bundle.cc789.js",
@@ -7044,5 +7054,5 @@
       "sha256": "c084ae5cc6199465cc151b31b3e8d75f48a5a099f2bd78ea80c37d1090618d23"
     }
   ],
-  "totalBytes": 210400425
+  "totalBytes": 210552289
 }

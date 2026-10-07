@@ -522,18 +522,55 @@ System.register("chunks:///_virtual/AvatarVisuals.ts", ['./rollupPluginModLoBabe
           this.releaseAssets();
         };
         _createClass(AvatarVisuals, [{
-          key: "state",
-          get: function get() {
+          key: "progress",
+          get: /** Counts completed model groups, not people or downloaded byte percentages. */
+          function get() {
             var _this$latest,
               _this4 = this,
               _this$latest2;
-            if (this.loading || this.bundleLoading || this.queue.length) return 'loading';
+            var required = new Map();
             var visible = Boolean(((_this$latest = this.latest) == null || (_this$latest = _this$latest.players.find(function (p) {
               return p.id === _this4.latest.self.id;
             })) == null ? void 0 : _this$latest.alive) || ((_this$latest2 = this.latest) == null ? void 0 : _this$latest2.result));
             for (var _iterator8 = _createForOfIteratorHelperLoose(((_this$latest3 = this.latest) == null ? void 0 : _this$latest3.players) || []), _step8; !(_step8 = _iterator8()).done;) {
               var _this$latest3;
               var player = _step8.value;
+              if (visible && player.alive && (player.id !== this.latest.self.id || this.thirdPerson)) {
+                var asset = avatarAsset(player);
+                required.set(asset.key, asset);
+              }
+            }
+            var ready = 0,
+              fallback = 0;
+            var usable = this.state === 'ready';
+            for (var _iterator9 = _createForOfIteratorHelperLoose(required.values()), _step9; !(_step9 = _iterator9()).done;) {
+              var _asset = _step9.value;
+              if (this.prefabs.has(_asset.key)) ready++;else if (usable && this.prefabs.has(_asset.fallback)) fallback++;
+            }
+            return {
+              total: required.size,
+              ready: ready,
+              fallback: fallback,
+              queued: this.queue.length,
+              loading: this.loading,
+              baseReady: ['female', 'male'].filter(function (key) {
+                return _this4.prefabs.has(key);
+              }).length
+            };
+          }
+        }, {
+          key: "state",
+          get: function get() {
+            var _this$latest4,
+              _this5 = this,
+              _this$latest5;
+            if (this.loading || this.bundleLoading || this.queue.length) return 'loading';
+            var visible = Boolean(((_this$latest4 = this.latest) == null || (_this$latest4 = _this$latest4.players.find(function (p) {
+              return p.id === _this5.latest.self.id;
+            })) == null ? void 0 : _this$latest4.alive) || ((_this$latest5 = this.latest) == null ? void 0 : _this$latest5.result));
+            for (var _iterator10 = _createForOfIteratorHelperLoose(((_this$latest6 = this.latest) == null ? void 0 : _this$latest6.players) || []), _step10; !(_step10 = _iterator10()).done;) {
+              var _this$latest6;
+              var player = _step10.value;
               if (!visible || !player.alive || player.id === this.latest.self.id && !this.thirdPerson) continue;
               var asset = avatarAsset(player);
               if (!this.prefabs.has(asset.key) && !this.prefabs.has(asset.fallback)) return 'failed';
@@ -548,8 +585,8 @@ System.register("chunks:///_virtual/AvatarVisuals.ts", ['./rollupPluginModLoBabe
   };
 });
 
-System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './NpcProfiles.ts', './FinishCinematic.ts', './SceneEntry.ts', './HudLayout.ts', './ViewCamera.ts', './CampusLighting.ts', './FirstPersonVisuals.ts', './CampusVisuals.ts', './AvatarVisuals.ts', './GameAudio.ts', './WebPlaytest.ts', './EntityVisuals.ts', './GameConnection.ts', './PlayerInput.ts', './GameplayView.ts'], function (exports) {
-  var _inheritsLoose, _createForOfIteratorHelperLoose, _extends, cclegacy, _decorator, profiler, Node, Camera, Color, DirectionalLight, input, Input, view, screen, UITransform, Canvas, Layers, Label, Button, Graphics, Mask, ScrollView, EditBox, ResolutionPolicy, director, sys, KeyCode, Component, TALK_TOPICS, FinishCinematic, sceneEntryState, hudViewport, hudLayout, cameraPosition, CampusLighting, FirstPersonVisuals, CampusVisuals, AvatarVisuals, GameAudio, announcePlaytestReady, publicPlaytestEnabled, EntityVisuals, GameConnection, joystickVector, clampPitch, worldMovement, gameStatus, distance3, interactionCommand, aimTarget, abilityCommand, PROGRAM_TUTORIAL, nearestNode;
+System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './NpcProfiles.ts', './NativeAliasRouting.ts', './FinishCinematic.ts', './SceneEntry.ts', './HudLayout.ts', './ViewCamera.ts', './CampusLighting.ts', './FirstPersonVisuals.ts', './CampusVisuals.ts', './AvatarVisuals.ts', './GameAudio.ts', './WebPlaytest.ts', './EntityVisuals.ts', './GameConnection.ts', './PlayerInput.ts', './GameplayView.ts'], function (exports) {
+  var _inheritsLoose, _createForOfIteratorHelperLoose, _extends, cclegacy, _decorator, profiler, Node, Camera, Color, DirectionalLight, input, Input, view, screen, UITransform, Canvas, Layers, Label, Button, Graphics, Mask, ScrollView, EditBox, ResolutionPolicy, director, sys, KeyCode, Component, TALK_TOPICS, installNativeAliasRouting, FinishCinematic, sceneEntryState, sceneEntryMessage, hudViewport, hudLayout, cameraPosition, CampusLighting, FirstPersonVisuals, CampusVisuals, AvatarVisuals, GameAudio, announcePlaytestReady, publicPlaytestEnabled, EntityVisuals, GameConnection, joystickVector, clampPitch, worldMovement, gameStatus, distance3, interactionCommand, aimTarget, abilityCommand, PROGRAM_TUTORIAL, nearestNode;
   return {
     setters: [function (module) {
       _inheritsLoose = module.inheritsLoose;
@@ -584,9 +621,12 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
     }, function (module) {
       TALK_TOPICS = module.TALK_TOPICS;
     }, function (module) {
+      installNativeAliasRouting = module.installNativeAliasRouting;
+    }, function (module) {
       FinishCinematic = module.FinishCinematic;
     }, function (module) {
       sceneEntryState = module.sceneEntryState;
+      sceneEntryMessage = module.sceneEntryMessage;
     }, function (module) {
       hudViewport = module.hudViewport;
       hudLayout = module.hudLayout;
@@ -701,6 +741,7 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
         var _proto = CampusBootstrap.prototype;
         _proto.onLoad = function onLoad() {
           var _this2 = this;
+          installNativeAliasRouting();
           profiler.hideStats();
           this.resizeHud();
           this.cameraNode = new Node('FirstPersonCamera');
@@ -1330,7 +1371,7 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
             }
             if (child.name === '状态' || child.name === '反馈') child.active = true;else if (child.name === '操作面板') child.active = Boolean(this.panelMode);else if (this.tourControls.indexOf(child) >= 0) child.active = clear && (snapshot == null ? void 0 : snapshot.demo) === true;else if (child.name === '电影开关') child.active = this.panelMode === 'menu';else if (lobby.indexOf(child.name) >= 0) child.active = !snapshot && (!this.publicWebPlaytest || ['服务地址', '房间码', '加入房间', '创建十二人房间'].indexOf(child.name) < 0);else if (child.name === '退出对局') child.active = Boolean(snapshot && !this.panelMode);else if (child.name === '菜单 / Esc') child.active = Boolean(playing && !this.panelMode);else if (child.name === '场景载入') child.active = playing && gate.state !== 'playing' && !this.panelMode;else if (child.name === '重试加载') child.active = gate.state === 'failed' && !this.panelMode;else if (game.indexOf(child.name) >= 0) child.active = clear;else if (child.name === '开始对局') child.active = Boolean(snapshot && snapshot.phase === 'lobby');else if (child.name === '移动摇杆' || child.name === '视角区域') child.active = clear && sys.isMobile;else if (child.name === '场景画质' || child.name === '音效开关') child.active = clear || this.panelMode === 'menu';
           }
-          if (this.loadingLabel) this.loadingLabel.string = gate.state === 'orientation' ? '请横屏或加宽窗口后继续\n菜单和退出仍可使用。\n' + (snapshot != null && snapshot.singlePlayer ? '单人剧情已暂停。' : '联机倒计时继续运行。') : gate.state === 'failed' ? '场景加载未完成\n请重试加载，或返回大厅。' : '正在进入望月废校\n准备校园与人物资源…\n' + (snapshot != null && snapshot.singlePlayer ? '单人计时将在资源准备后开始。' : '联机倒计时继续，请等待资源准备。');
+          this.refreshLoadingText(gate);
           if (this.status) {
             this.status.node.setPosition(0, playing ? 290 : 215, 0);
             this.status.fontSize = playing ? 18 : 22;
@@ -1338,10 +1379,19 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
           }
           this.layoutHud();
         };
+        _proto.refreshLoadingText = function refreshLoadingText(gate) {
+          var _this$campus3, _this$avatars2;
+          if (gate === void 0) {
+            gate = this.entry();
+          }
+          if (!this.loadingLabel) return;
+          var message = sceneEntryMessage(gate, this.net.snapshot, ((_this$campus3 = this.campus) == null ? void 0 : _this$campus3.state) || 'loading', (_this$avatars2 = this.avatars) == null ? void 0 : _this$avatars2.progress);
+          if (this.loadingLabel.string !== message) this.loadingLabel.string = message;
+        };
         _proto.setView = function setView(value) {
-          var _this$avatars2;
+          var _this$avatars3;
           this.thirdPerson = value;
-          (_this$avatars2 = this.avatars) == null || _this$avatars2.setThirdPerson(value);
+          (_this$avatars3 = this.avatars) == null || _this$avatars3.setThirdPerson(value);
           if (this.viewLabel) this.viewLabel.string = value ? '视角：第三人称' : '视角：第一人称';
           this.positionCamera();
         };
@@ -1355,7 +1405,7 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
           this.cameraNode.setPosition(p.x, p.y, p.z);
         };
         _proto.resetRoom = function resetRoom() {
-          var _this$film4, _this$avatars3, _this$units, _this$sound, _this$firstPerson, _this$lighting, _this$cameraNode, _this$cameraNode2;
+          var _this$film4, _this$avatars4, _this$units, _this$sound, _this$firstPerson, _this$lighting, _this$cameraNode, _this$cameraNode2;
           (_this$film4 = this.film) == null || _this$film4.reset();
           this.keys.clear();
           this.touchMove = {
@@ -1367,7 +1417,7 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
           this.lastPhase = '';
           this.lastTour = 0;
           this.openPanel('');
-          (_this$avatars3 = this.avatars) == null || _this$avatars3.clear();
+          (_this$avatars4 = this.avatars) == null || _this$avatars4.clear();
           (_this$units = this.units) == null || _this$units.clear();
           (_this$sound = this.sound) == null || _this$sound.reset();
           (_this$firstPerson = this.firstPerson) == null || _this$firstPerson.clear();
@@ -1592,11 +1642,12 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
           if (this.panelMode !== 'clues' && this.panelMode !== 'dialogue' && this.panelMode !== 'menu') ;
         };
         _proto.update = function update(dt) {
-          var _this$film6, _this$lighting2, _this$firstPerson2, _this$avatars4, _this$units2, _this$sound2, _snapshot$players$fin;
+          var _this$film6, _this$lighting2, _this$firstPerson2, _this$avatars5, _this$units2, _this$sound2, _snapshot$players$fin;
           this.resizeHud();
           (_this$film6 = this.film) == null || _this$film6.tick(dt);
           var gate = this.entry();
           this.net.pauseStory(gate.pause);
+          if (gate.state === 'loading') this.refreshLoadingText(gate);
           if (gate.state !== this.lastEntryState) {
             this.lastEntryState = gate.state;
             this.keys.clear();
@@ -1611,7 +1662,7 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
           this.positionCamera();
           (_this$lighting2 = this.lighting) == null || _this$lighting2.update(dt);
           (_this$firstPerson2 = this.firstPerson) == null || _this$firstPerson2.update(dt, Boolean(this.panelMode || this.typing || this.thirdPerson));
-          (_this$avatars4 = this.avatars) == null || _this$avatars4.update(dt);
+          (_this$avatars5 = this.avatars) == null || _this$avatars5.update(dt);
           (_this$units2 = this.units) == null || _this$units2.update(dt);
           (_this$sound2 = this.sound) == null || _this$sound2.tick();
           if (this.feedbackTime > 0) {
@@ -1642,7 +1693,7 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
           }));
         };
         _proto.onDestroy = function onDestroy() {
-          var _this$film7, _this$campus3, _this$avatars5, _this$units3, _this$sound3, _this$firstPerson3, _this$lighting3;
+          var _this$film7, _this$campus4, _this$avatars6, _this$units3, _this$sound3, _this$firstPerson3, _this$lighting3;
           (_this$film7 = this.film) == null || _this$film7.dispose();
           view.off('canvas-resize', this.resizeHud, this);
           screen.off('window-resize', this.resizeHud, this);
@@ -1652,8 +1703,8 @@ System.register("chunks:///_virtual/CampusBootstrap.ts", ['./rollupPluginModLoBa
           input.off(Input.EventType.MOUSE_MOVE, this.mouseMove, this);
           input.off(Input.EventType.MOUSE_UP, this.mouseUp, this);
           this.net.close();
-          (_this$campus3 = this.campus) == null || _this$campus3.dispose();
-          (_this$avatars5 = this.avatars) == null || _this$avatars5.dispose();
+          (_this$campus4 = this.campus) == null || _this$campus4.dispose();
+          (_this$avatars6 = this.avatars) == null || _this$avatars6.dispose();
           (_this$units3 = this.units) == null || _this$units3.dispose();
           (_this$sound3 = this.sound) == null || _this$sound3.dispose();
           (_this$firstPerson3 = this.firstPerson) == null || _this$firstPerson3.dispose();
@@ -3352,10 +3403,96 @@ System.register("chunks:///_virtual/HudLayout.ts", ['cc', './NpcProfiles.ts'], f
   };
 });
 
-System.register("chunks:///_virtual/main", ['./AudioTimeline.ts', './AvatarCatalog.ts', './AvatarMotion.ts', './AvatarVisuals.ts', './CampusBootstrap.ts', './CampusLighting.ts', './CampusVisuals.ts', './EntityVisuals.ts', './FinishCinematic.ts', './FinishEvents.ts', './FirstPersonPose.ts', './FirstPersonVisuals.ts', './FrameStory.ts', './GameAudio.ts', './GameConnection.ts', './GameplayView.ts', './HistoryLookup.ts', './HudLayout.ts', './NpcProfiles.ts', './PlayerInput.ts', './Protocol.ts', './RoomConnection.ts', './SceneEntry.ts', './StoryBrain.ts', './StoryEvidence.ts', './StoryGeometry.ts', './StoryNavigation.ts', './StoryNavigationData.ts', './StoryRules.ts', './StoryWork.ts', './ViewCamera.ts', './VisibleEntities.ts', './WebPlaytest.ts'], function () {
+System.register("chunks:///_virtual/main", ['./AudioTimeline.ts', './AvatarCatalog.ts', './AvatarMotion.ts', './AvatarVisuals.ts', './CampusBootstrap.ts', './CampusLighting.ts', './CampusVisuals.ts', './EntityVisuals.ts', './FinishCinematic.ts', './FinishEvents.ts', './FirstPersonPose.ts', './FirstPersonVisuals.ts', './FrameStory.ts', './GameAudio.ts', './GameConnection.ts', './GameplayView.ts', './HistoryLookup.ts', './HudLayout.ts', './NativeAliasRouting.ts', './NativeAliases.ts', './NpcProfiles.ts', './PlayerInput.ts', './Protocol.ts', './RoomConnection.ts', './SceneEntry.ts', './StoryBrain.ts', './StoryEvidence.ts', './StoryGeometry.ts', './StoryNavigation.ts', './StoryNavigationData.ts', './StoryRules.ts', './StoryWork.ts', './ViewCamera.ts', './VisibleEntities.ts', './WebPlaytest.ts'], function () {
   return {
-    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
     execute: function () {}
+  };
+});
+
+System.register("chunks:///_virtual/NativeAliases.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
+  var _createForOfIteratorHelperLoose, cclegacy;
+  return {
+    setters: [function (module) {
+      _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
+    }, function (module) {
+      cclegacy = module.cclegacy;
+    }],
+    execute: function () {
+      exports('createNativeAliasPipe', createNativeAliasPipe);
+      cclegacy._RF.push({}, "88e837pJfhPfZdc61iItDy+", "NativeAliases", undefined);
+      // @ts-nocheck
+      // Generated by tools/sync_cocos_story.mjs from shared/native_aliases.js; edit the source.
+      var nativePath = /^assets\/([a-z0-9_]+)\/native\/[a-f0-9]{2}\/[a-zA-Z0-9@_.-]+\.(png|bin)$/;
+      /** Change only same-origin byte-equivalent native URLs; retain UUID/parser ownership. */
+      function createNativeAliasPipe(aliases, baseUrl) {
+        var base = new URL('./', baseUrl),
+          routes = new Map();
+        for (var _i = 0, _Object$entries = Object.entries(aliases || {}); _i < _Object$entries.length; _i++) {
+          var _Object$entries$_i = _Object$entries[_i],
+            source = _Object$entries$_i[0],
+            target = _Object$entries$_i[1];
+          if (typeof target !== 'string') continue;
+          var from = nativePath.exec(source),
+            to = nativePath.exec(target);
+          if (from && to && from[1] === to[1] && from[2] === to[2] && source !== target) routes.set(source, target);
+        }
+        return function (task) {
+          task.output = task.input;
+          for (var _iterator = _createForOfIteratorHelperLoose(task.input || []), _step; !(_step = _iterator()).done;) {
+            var item = _step.value;
+            if (!item.isNative || typeof item.url !== 'string') continue;
+            var original = void 0;
+            try {
+              original = new URL(item.url, base);
+            } catch (_unused) {
+              continue;
+            }
+            if (original.origin !== base.origin || original.username || original.password || !original.pathname.startsWith(base.pathname)) continue;
+            var destination = routes.get(original.pathname.slice(base.pathname.length));
+            if (!destination) continue;
+            var url = new URL(destination, base);
+            url.search = original.search;
+            url.hash = original.hash;
+            item.url = url.href;
+          }
+        };
+      }
+      cclegacy._RF.pop();
+    }
+  };
+});
+
+System.register("chunks:///_virtual/NativeAliasRouting.ts", ['cc', './NativeAliases.ts', './WebPlaytest.ts'], function (exports) {
+  var cclegacy, assetManager, createNativeAliasPipe, publicPlaytestEnabled;
+  return {
+    setters: [function (module) {
+      cclegacy = module.cclegacy;
+      assetManager = module.assetManager;
+    }, function (module) {
+      createNativeAliasPipe = module.createNativeAliasPipe;
+    }, function (module) {
+      publicPlaytestEnabled = module.publicPlaytestEnabled;
+    }],
+    execute: function () {
+      exports('installNativeAliasRouting', installNativeAliasRouting);
+      cclegacy._RF.push({}, "1e4fdX7LKhDMaYWHZ/clTZW", "NativeAliasRouting", undefined);
+      var installed = new WeakSet();
+      /** The static publisher supplies hash-verified aliases; native and editor builds remain normal. */
+      function installNativeAliasRouting() {
+        var _page$document;
+        var page = globalThis,
+          aliases = page.CAMPUS_NATIVE_ALIASES,
+          base = (_page$document = page.document) == null ? void 0 : _page$document.baseURI;
+        if (!publicPlaytestEnabled() || !aliases || typeof base !== 'string') return false;
+        var pipeline = assetManager.transformPipeline;
+        if (installed.has(pipeline)) return true;
+        pipeline.append(createNativeAliasPipe(aliases, base));
+        installed.add(pipeline);
+        return true;
+      }
+      cclegacy._RF.pop();
+    }
   };
 });
 
@@ -3863,7 +4000,10 @@ System.register("chunks:///_virtual/SceneEntry.ts", ['cc'], function (exports) {
       cclegacy = module.cclegacy;
     }],
     execute: function () {
-      exports('sceneEntryState', sceneEntryState);
+      exports({
+        sceneEntryMessage: sceneEntryMessage,
+        sceneEntryState: sceneEntryState
+      });
       cclegacy._RF.push({}, "2627dSECXFC+KXFEnx4s3Pg", "SceneEntry", undefined);
       // @ts-nocheck
       // Generated by tools/sync_cocos_story.mjs from shared/scene_entry.js; edit the source.
@@ -3889,6 +4029,23 @@ System.register("chunks:///_virtual/SceneEntry.ts", ['cc'], function (exports) {
           pause: Boolean(snapshot.singlePlayer && (presentation || state !== 'playing' || panelMode && snapshot.phase !== 'meeting')),
           controls: state === 'playing' && !panelMode && !presentation && !snapshot.result
         };
+      }
+      /** Report real completed groups; never imply a byte-based download percentage. */
+      function sceneEntryMessage(gate, snapshot, campus, progress) {
+        var _progress;
+        if (campus === void 0) {
+          campus = 'loading';
+        }
+        if (progress === void 0) {
+          progress = null;
+        }
+        var clock = snapshot != null && snapshot.singlePlayer ? '单人计时将在资源准备后开始。' : '联机倒计时继续，请等待资源准备。';
+        if (gate.state === 'orientation') return '请横屏或加宽窗口后继续\n菜单和退出仍可使用。\n' + (snapshot != null && snapshot.singlePlayer ? '单人剧情已暂停。' : '联机倒计时继续运行。');
+        if (gate.state === 'failed') return '场景加载未完成\n请重试加载，或返回大厅。\n' + (snapshot != null && snapshot.singlePlayer ? '单人剧情已暂停。' : '联机倒计时继续运行。');
+        var campusText = campus === 'ready' ? '已准备' : '正在加载';
+        var models = (_progress = progress) != null && _progress.total ? "\u4EBA\u7269\u6A21\u578B\uFF1A\u5DF2\u51C6\u5907 " + progress.ready + "/" + progress.total + " \u7EC4" + (progress.fallback ? "\uFF0C\u5907\u7528 " + progress.fallback + " \u7EC4" : '') : '人物模型：等待角色资源';
+        var requests = progress ? "\u57FA\u7840\u4EBA\u7269 " + progress.baseReady + "/2 \xB7 \u6392\u961F " + progress.queued + " \xB7 \u52A0\u8F7D " + progress.loading : '正在确认人物资源';
+        return "\u6B63\u5728\u8FDB\u5165\u671B\u6708\u5E9F\u6821\n\u6821\u56ED\uFF1A" + campusText + "\n" + models + "\n" + requests + "\n" + clock;
       }
       cclegacy._RF.pop();
     }
